@@ -1,0 +1,1795 @@
+db@smvit:~$ sudo mysql -u root -p
+[sudo] password for db: 
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.36-0ubuntu0.23.10.1 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| 094_ORDERS         |
+| 1MV21CS024         |
+| 1MV21CS039         |
+| 1MV21CS073         |
+| 1MV21CS094         |
+| 1MV21CS103         |
+| 1MV21CS129         |
+| ORDER_DB           |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+12 rows in set (0.01 sec)
+
+mysql> use 1MV21CS129;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+
+mysql> use 1MV21CS129;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_1MV21CS129 |
++----------------------+
+| ACTOR                |
+| BOOK                 |
+| BOOK_AUTHORS         |
+| BOOK_COPIES          |
+| BOOK_LENDING         |
+| CLASS                |
+| CUSTOMER             |
+| DIRECTOR             |
+| IAMARKS              |
+| LIBRARY_PROGRAMME    |
+| MOVIES               |
+| MOVIE_CAST           |
+| ORDERS               |
+| PUBLISHER            |
+| RATING               |
+| SALESMAN             |
+| SEMSEC               |
+| STUDENT              |
+| SUBJECT              |
++----------------------+
+19 rows in set (0.00 sec)
+
+
+mysql> CREATE TABLE ORDERS( ORD_NO INT, PURCHASE_AMT DOUBLE, ORD_DATE DATE, CUSTOMER_ID INT, SALESMAN_ID INT, CONSTRAINT PK_ON PRIMARY KEY(ORD_NO), CONSTRAINT FK_CID FOREIGN KEY(CUSTOMER_ID) REFERENCES CUSTOMER(CUSTOMER_ID) ON DELETE SET NULL, CONSTRAINT FK_SID FOREIGN KEY(SALESMAN_ID) REFERENCES SALESMAN(SALESMAN_ID) ON DELETE SET NULL );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC ORDERS;
++--------------+--------+------+-----+---------+-------+
+| Field        | Type   | Null | Key | Default | Extra |
++--------------+--------+------+-----+---------+-------+
+| ORD_NO       | int    | NO   | PRI | NULL    |       |
+| PURCHASE_AMT | double | YES  |     | NULL    |       |
+| ORD_DATE     | date   | YES  |     | NULL    |       |
+| CUSTOMER_ID  | int    | YES  | MUL | NULL    |       |
+| SALESMAN_ID  | int    | YES  | MUL | NULL    |       |
++--------------+--------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> DESC SALESMAN;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| SALESMAN_ID | int         | NO   | PRI | NULL    |       |
+| NAME        | varchar(15) | YES  |     | NULL    |       |
+| CITY        | varchar(15) | YES  |     | NULL    |       |
+| COMISSION   | double      | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> DESC CUSTOMER;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| CUSTOMER_ID | int         | NO   | PRI | NULL    |       |
+| CUST_NAME   | varchar(15) | YES  |     | NULL    |       |
+| CITY        | varchar(15) | YES  |     | NULL    |       |
+| GRADE       | int         | YES  |     | NULL    |       |
+| SALESMAN_ID | int         | YES  | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> INSERT INTO SALESMAN VALUES(1000,'RAMA','BANGALORE',10000.75);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO SALESMAN VALUES(2000,'KRISHNA','MATHURA',20000.25);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO SALESMAN VALUES(3000,'SHIVA','AMARNATH',30000.3);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO SALESMAN VALUES(4000,'GOVINDA','TIRUPATHI',4000.4);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SALESMAN VALUES(5000,'NARAYANA','VELLORE',50000.5);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT *FROM SALESMAN;
++-------------+----------+-----------+-----------+
+| SALESMAN_ID | NAME     | CITY      | COMISSION |
++-------------+----------+-----------+-----------+
+|        1000 | RAMA     | BANGALORE |  10000.75 |
+|        2000 | KRISHNA  | MATHURA   |  20000.25 |
+|        3000 | SHIVA    | AMARNATH  |   30000.3 |
+|        4000 | GOVINDA  | TIRUPATHI |    4000.4 |
+|        5000 | NARAYANA | VELLORE   |   50000.5 |
++-------------+----------+-----------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO CUSTOMER VALUES(10,'GANESH','BANGALORE',100,1000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CUSTOMER VALUES(20,'SUDHEEP','BANGALORE',200,2000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO CUSTOMER VALUES(30,'PRABHAS','HYDERABAD',300,3000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CUSTOMER VALUES(40,'ARVIND','CHENNAI',400,4000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO CUSTOMER VALUES(50,'DARSHAN','BANGALORE',500,2000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CUSTOMER VALUES(60,'YASH','BANGALORE',600,1000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT *FROM CUSTOMER;
++-------------+-----------+-----------+-------+-------------+
+| CUSTOMER_ID | CUST_NAME | CITY      | GRADE | SALESMAN_ID |
++-------------+-----------+-----------+-------+-------------+
+|          10 | GANESH    | BANGALORE |   100 |        1000 |
+|          20 | SUDHEEP   | BANGALORE |   200 |        2000 |
+|          30 | PRABHAS   | HYDERABAD |   300 |        3000 |
+|          40 | ARVIND    | CHENNAI   |   400 |        4000 |
+|          50 | DARSHAN   | BANGALORE |   500 |        2000 |
+|          60 | YASH      | BANGALORE |   600 |        1000 |
++-------------+-----------+-----------+-------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO ORDERS VALUES(1111,100000.00,'2017-01-01',10,2000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ORDERS VALUES(2222,200000.00,'2017-02-21',20,3000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ORDERS VALUES(3333,300000.00,'2017-03-15',20,4000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ORDERS VALUES(3333,300000.00,'2017-03-15',30,4000);
+ERROR 1062 (23000): Duplicate entry '3333' for key 'ORDERS.PRIMARY'
+mysql> DELETE FROM ORDERS WHERE ORD_NO=3333;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ORDERS VALUES(3333,300000.00,'2017-03-15',30,4000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ORDERS VALUES(4444,400000.00,'2017-04-18',40,5000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ORDERS VALUES(5555,500000.00,'2017-05-12',10,1000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO ORDERS VALUES(6666,600000.00,'2017-05-12',10,1000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT *FROM ORDERS;
++--------+--------------+------------+-------------+-------------+
+| ORD_NO | PURCHASE_AMT | ORD_DATE   | CUSTOMER_ID | SALESMAN_ID |
++--------+--------------+------------+-------------+-------------+
+|   1111 |       100000 | 2017-01-01 |          10 |        2000 |
+|   2222 |       200000 | 2017-02-21 |          20 |        3000 |
+|   3333 |       300000 | 2017-03-15 |          30 |        4000 |
+|   4444 |       400000 | 2017-04-18 |          40 |        5000 |
+|   5555 |       500000 | 2017-05-12 |          10 |        1000 |
+|   6666 |       600000 | 2017-05-12 |          10 |        1000 |
++--------+--------------+------------+-------------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> COMMIT;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT COUNT(CUSTOMER_ID)
+    -> FROM CUSTOMER
+    -> WHERE GRADE >( SELECT AVG(GRADE)
+    -> FROM CUSTOMER
+    -> WHERE CITY='BANGALORE');
++--------------------+
+| COUNT(CUSTOMER_ID) |
++--------------------+
+|                  3 |
++--------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT S.NAME,S.SALESMAN_ID
+    -> FROM SALESMAN S,CUSTOMER C
+    -> WHERE S.SALESMAN_ID=C.SALESMAN_ID
+    -> GROUP BY S.NAME,S.SALESMAN_ID
+    -> HAVING COUNT(C.CUSTOMER_ID)>1;
++---------+-------------+
+| NAME    | SALESMAN_ID |
++---------+-------------+
+| RAMA    |        1000 |
+| KRISHNA |        2000 |
++---------+-------------+
+2 rows in set (0.01 sec)
+
+mysql> (SELECT S.SALESMAN_ID,S.NAME,C.CUST_NAME
+    -> FROM SALESMAN S,CUSTOMER C
+    -> WHERE S.CITY=C.CITY AND S.SALESMAN_ID=C.SALESMAN_ID)
+    -> UNION
+    -> (SELECT S1.SALESMAN_ID,S1.NAME,'NO CUSTOMER'
+    -> FROM SALESMAN S1,CUSTOMER C1
+    -> WHERE S1.CITY!=C1.CITY AND S1.SALESMAN_ID=C1.SALESMAN_ID);
++-------------+---------+-------------+
+| SALESMAN_ID | NAME    | CUST_NAME   |
++-------------+---------+-------------+
+|        1000 | RAMA    | GANESH      |
+|        1000 | RAMA    | YASH        |
+|        2000 | KRISHNA | NO CUSTOMER |
+|        3000 | SHIVA   | NO CUSTOMER |
+|        4000 | GOVINDA | NO CUSTOMER |
++-------------+---------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> CREATE VIEW HIGH_ORDER_DAY AS
+    -> SELECT O.ORD_DATE,O.PURCHASE_AMT,S.SALESMAN_ID,S.NAME,C.CUST_NAME
+    -> FROM ORDERS O, SALESMAN S, CUSTOMER C
+    -> WHERE O.SALESMAN_ID=S.SALESMAN_ID AND C.CUSTOMER_ID=O.CUSTOMER_ID;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESC HIGH_ORDER_DAY;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| ORD_DATE     | date        | YES  |     | NULL    |       |
+| PURCHASE_AMT | double      | YES  |     | NULL    |       |
+| SALESMAN_ID  | int         | NO   |     | NULL    |       |
+| NAME         | varchar(15) | YES  |     | NULL    |       |
+| CUST_NAME    | varchar(15) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT *FROM HIGH_ORDER_DAY H
+    -> WHERE H.PURCHASE_AMT=(SELECT MAX(H1.PURCHASE_AMT)
+    -> FROM HIGH_ORDER_DAY H1
+    -> WHERE H1.ORD_DATE=H.ORD_DATE);
++------------+--------------+-------------+----------+-----------+
+| ORD_DATE   | PURCHASE_AMT | SALESMAN_ID | NAME     | CUST_NAME |
++------------+--------------+-------------+----------+-----------+
+| 2017-01-01 |       100000 |        2000 | KRISHNA  | GANESH    |
+| 2017-02-21 |       200000 |        3000 | SHIVA    | SUDHEEP   |
+| 2017-03-15 |       300000 |        4000 | GOVINDA  | PRABHAS   |
+| 2017-04-18 |       400000 |        5000 | NARAYANA | ARVIND    |
+| 2017-05-12 |       600000 |        1000 | RAMA     | GANESH    |
++------------+--------------+-------------+----------+-----------+
+5 rows in set (0.01 sec)
+
+mysql> DELETE FROM SALESMAN WHERE SALESMAN_ID=1000;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> SELECT * FROM SALESMAN;
++-------------+----------+-----------+-----------+
+| SALESMAN_ID | NAME     | CITY      | COMISSION |
++-------------+----------+-----------+-----------+
+|        2000 | KRISHNA  | MATHURA   |  20000.25 |
+|        3000 | SHIVA    | AMARNATH  |   30000.3 |
+|        4000 | GOVINDA  | TIRUPATHI |    4000.4 |
+|        5000 | NARAYANA | VELLORE   |   50000.5 |
++-------------+----------+-----------+-----------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT * FROM CUSTOMER;
++-------------+-----------+-----------+-------+-------------+
+| CUSTOMER_ID | CUST_NAME | CITY      | GRADE | SALESMAN_ID |
++-------------+-----------+-----------+-------+-------------+
+|          10 | GANESH    | BANGALORE |   100 |        NULL |
+|          20 | SUDHEEP   | BANGALORE |   200 |        2000 |
+|          30 | PRABHAS   | HYDERABAD |   300 |        3000 |
+|          40 | ARVIND    | CHENNAI   |   400 |        4000 |
+|          50 | DARSHAN   | BANGALORE |   500 |        2000 |
+|          60 | YASH      | BANGALORE |   600 |        NULL |
++-------------+-----------+-----------+-------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT * FROM ORDERS;
++--------+--------------+------------+-------------+-------------+
+| ORD_NO | PURCHASE_AMT | ORD_DATE   | CUSTOMER_ID | SALESMAN_ID |
++--------+--------------+------------+-------------+-------------+
+|   1111 |       100000 | 2017-01-01 |          10 |        2000 |
+|   2222 |       200000 | 2017-02-21 |          20 |        3000 |
+|   3333 |       300000 | 2017-03-15 |          30 |        4000 |
+|   4444 |       400000 | 2017-04-18 |          40 |        5000 |
+|   5555 |       500000 | 2017-05-12 |          10 |        NULL |
+|   6666 |       600000 | 2017-05-12 |          10 |        NULL |
++--------+--------------+------------+-------------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> COMMIT;
+Query OK, 0 rows affected (0.00 sec)
+							LIBRARY DATABASE
+
+mysql> USE 1MV22CS404;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SHOW TABLES;
++----------------------+
+| Tables_in_1MV22CS404 |
++----------------------+
+| BOOK                 |
+| LIBRARY_PROGRAMME    |
+| PUBLISHER            |
++----------------------+
+3 rows in set (0.00 sec)
+
+mysql> DESC BOOK;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| BOOK_ID        | int         | YES  |     | NULL    |       |
+| TITLE          | varchar(25) | YES  |     | NULL    |       |
+| PUBLISHER_NAME | varchar(15) | YES  | MUL | NULL    |       |
+| PUB_YEAR       | int         | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> DESC LIBRARY_PROGRAMME;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| PROGRAMME_ID   | int         | NO   | PRI | NULL    |       |
+| PROGRAMME_NAME | varchar(15) | YES  |     | NULL    |       |
+| ADDRESS        | varchar(15) | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> DESC PUBLISHER;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| NAME    | varchar(15) | NO   | PRI | NULL    |       |
+| ADDRESS | varchar(25) | YES  |     | NULL    |       |
+| PHONE   | int         | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+ysql> CREATE TABLE BOOK ( BOOK_ID INT, TITLE VARCHAR(25), PUBLISHER_NAME VARCHAR(25), PUB_YEAR INT, CONSTRAINT PK_BID PRIMARY KEY(BOOK_ID), CONSTRAINT FK_N FOREIGN KEY(PUBLISHER_NAME
+) REFERENCES PUBLISHER(NAME) ON DELETE CASCADE );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESC BOOK;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| BOOK_ID        | int         | NO   | PRI | NULL    |       |
+| TITLE          | varchar(25) | YES  |     | NULL    |       |
+| PUBLISHER_NAME | varchar(25) | YES  | MUL | NULL    |       |
+| PUB_YEAR       | int         | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> CREATE TABLE BOOK_AUTHORS ( BOOK_ID  INT, AUTHOR_NAME VARCHAR(25), CONSTRAINT FK_BI FOREIGN KEY(BOOK_ID) REFERENCES BOOK(BOOK_ID) ON DELETE CASCADE );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESC BOOK_AUTHORS;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| BOOK_ID     | int         | YES  | MUL | NULL    |       |
+| AUTHOR_NAME | varchar(25) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> CREATE TABLE BOOK_COPIES ( BOOK_ID INT, PROGRAMME_ID INT, NO_OF_COPIES INT, CONSTRAINT CPK_BBI PRIMARY KEY(BOOK_ID,PROGRAMME_ID), CONSTRAINT FK_BID FOREIGN KEY(BOOK_ID) REFERENCES BOOK(BOOK_ID) ON DELETE CASCADE, CONSTRAINT FK_I FOREIGN KEY(PROGRAMME_ID) REFERENCES LIBRARY_PROGRAMME(PROGRAMME_ID) ON DELETE CASCADE );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC BOOK_COPIES;
++--------------+------+------+-----+---------+-------+
+| Field        | Type | Null | Key | Default | Extra |
++--------------+------+------+-----+---------+-------+
+| BOOK_ID      | int  | NO   | PRI | NULL    |       |
+| PROGRAMME_ID | int  | NO   | PRI | NULL    |       |
+| NO_OF_COPIES | int  | YES  |     | NULL    |       |
++--------------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE TABLE BOOK_LENDING
+    -> (
+    -> BOOK_ID INT,
+    -> PROGRAMME_ID INT,
+    -> CARD_NO INT,
+    -> DATE_OUT DATE,
+    -> DUE_DATE DATE,
+    -> CONSTRAINT CPK_BBC PRIMARY KEY(BOOK_ID,PROGRAMME_ID,CARD_NO),
+    -> CONSTRAINT FK_A FOREIGN KEY(BOOK_ID) REFERENCES BOOK(BOOK_ID) ON DELETE CASCADE,
+    -> CONSTRAINT FK_C FOREIGN KEY(PROGRAMME_ID) REFERENCES LIBRARY_PROGRAMME(PROGRAMME_ID) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC BOOK_LENDING;
++--------------+------+------+-----+---------+-------+
+| Field        | Type | Null | Key | Default | Extra |
++--------------+------+------+-----+---------+-------+
+| BOOK_ID      | int  | NO   | PRI | NULL    |       |
+| PROGRAMME_ID | int  | NO   | PRI | NULL    |       |
+| CARD_NO      | int  | NO   | PRI | NULL    |       |
+| DATE_OUT     | date | YES  |     | NULL    |       |
+| DUE_DATE     | date | YES  |     | NULL    |       |
++--------------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO PUBLISHER VALUES('PHI','PUNE,INDIA',90807060);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PUBLISHER VALUES('PEARSON','MUMBAI,INDIA',908070607);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PUBLISHER VALUES('MCGRAWWHILL','HOUSTIN,USA',10207060);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PUBLISHER VALUES('WILEY','CALIFORNIA,USA',110808088);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PUBLISHER VALUES('SSI','FLORIDA',120938432);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PUBLISHER VALUES('SP','BANGALORE',909090908);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM PUBLISHER;
++-------------+----------------+-----------+
+| NAME        | ADDRESS        | PHONE     |
++-------------+----------------+-----------+
+| MCGRAWWHILL | HOUSTIN,USA    |  10207060 |
+| PEARSON     | MUMBAI,INDIA   | 908070607 |
+| PHI         | PUNE,INDIA     |  90807060 |
+| SP          | BANGALORE      | 909090908 |
+| SSI         | FLORIDA        | 120938432 |
+| WILEY       | CALIFORNIA,USA | 110808088 |
++-------------+----------------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO LIBRARY_PROGRAMME VALUES(1000,'MVIT','YELHANKA');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO LIBRARY_PROGRAMME VALUES(2000,'SVIT','DODDABALLPUR');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO LIBRARY_PROGRAMME VALUES(3000,'BMSIT','AVANAHALLI');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO LIBRARY_PROGRAMME VALUES(4000,'SVCE','VIDYANAGAR');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO LIBRARY_PROGRAMME VALUES(5000,'MSCE','CHIKAJALA');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO LIBRARY_PROGRAMME VALUES(6000,'NMIT','KOGILU');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM LIBRARY_PROGRAMME;
++--------------+----------------+--------------+
+| PROGRAMME_ID | PROGRAMME_NAME | ADDRESS      |
++--------------+----------------+--------------+
+|         1000 | MVIT           | YELHANKA     |
+|         2000 | SVIT           | DODDABALLPUR |
+|         3000 | BMSIT          | AVANAHALLI   |
+|         4000 | SVCE           | VIDYANAGAR   |
+|         5000 | MSCE           | CHIKAJALA    |
+|         6000 | NMIT           | KOGILU       |
++--------------+----------------+--------------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO BOOK VALUES(1111,'FUNDAMENTALS OF DATABASE','PHI',2009);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK VALUES(2222,'BASICS OF LOGIC DESIGN','PEARSON',2009);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK VALUES(3333,'DATA STRUCTURES','MCGRAWWHILL',2015);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO BOOK VALUES(4444,'AI','WILEY',2017);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK VALUES(5555,'PROGRAMMING SKILLS','SSI',2014);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK VALUES(6666,'DESIGN OF ALGORITHMS','SP',2013);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM BOOK;
++---------+--------------------------+----------------+----------+
+| BOOK_ID | TITLE                    | PUBLISHER_NAME | PUB_YEAR |
++---------+--------------------------+----------------+----------+
+|    1111 | FUNDAMENTALS OF DATABASE | PHI            |     2009 |
+|    2222 | BASICS OF LOGIC DESIGN   | PEARSON        |     2009 |
+|    3333 | DATA STRUCTURES          | MCGRAWWHILL    |     2015 |
+|    4444 | AI                       | WILEY          |     2017 |
+|    5555 | PROGRAMMING SKILLS       | SSI            |     2014 |
+|    6666 | DESIGN OF ALGORITHMS     | SP             |     2013 |
++---------+--------------------------+----------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO BOOK_AUTHORS VALUES(1111,'NAVATHE');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_AUTHORS VALUES(2222,'GODSE');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_AUTHORS VALUES(3333,'SAHANI');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_AUTHORS VALUES(4444,'RITHCHIE KNIGHT');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO BOOK_AUTHORS VALUES(5555,'BALAGURUSWAMY');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_AUTHORS VALUES(6666,'COREMEN');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM BOOK_AUTHORS;
++---------+-----------------+
+| BOOK_ID | AUTHOR_NAME     |
++---------+-----------------+
+|    1111 | NAVATHE         |
+|    2222 | GODSE           |
+|    3333 | SAHANI          |
+|    4444 | RITHCHIE KNIGHT |
+|    5555 | BALAGURUSWAMY   |
+|    6666 | COREMEN         |
++---------+-----------------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO BOOK_COPIES VALUES(1111,1000,10);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_COPIES VALUES(2222,2000,5);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_COPIES VALUES(3333,3000,7);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_COPIES VALUES(4444,4000,9);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO BOOK_COPIES VALUES(5555,5000,6);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_COPIES VALUES(6666,6000,12);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO BOOK_COPIES VALUES(2222,1000,15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM BOOK_COPIES;
++---------+--------------+--------------+
+| BOOK_ID | PROGRAMME_ID | NO_OF_COPIES |
++---------+--------------+--------------+
+|    1111 |         1000 |           10 |
+|    2222 |         1000 |           15 |
+|    2222 |         2000 |            5 |
+|    3333 |         3000 |            7 |
+|    4444 |         4000 |            9 |
+|    5555 |         5000 |            6 |
+|    6666 |         6000 |           12 |
++---------+--------------+--------------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO BOOK_LENDING VALUES(1111,1000,10,'2017-02-15','2017-06-15');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_LENDING VALUES(2222,2000,10,'2017-03-10','2017-08-15');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_LENDING VALUES(3333,3000,10,'2017-04-15','2017-09-15');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_LENDING VALUES(4444,4000,10,'2017-04-10','2017-11-15');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_LENDING VALUES(5555,5000,20,'2017-02-15','2017-06-15');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO BOOK_LENDING VALUES(6666,6000,30,'2017-03-10','2017-08-15');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO BOOK_LENDING VALUES(5555,5000,10,'2016-01-15','2016-06-15');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM BOOK_LENDING;
++---------+--------------+---------+------------+------------+
+| BOOK_ID | PROGRAMME_ID | CARD_NO | DATE_OUT   | DUE_DATE   |
++---------+--------------+---------+------------+------------+
+|    1111 |         1000 |      10 | 2017-02-15 | 2017-06-15 |
+|    2222 |         2000 |      10 | 2017-03-10 | 2017-08-15 |
+|    3333 |         3000 |      10 | 2017-04-15 | 2017-09-15 |
+|    4444 |         4000 |      10 | 2017-04-10 | 2017-11-15 |
+|    5555 |         5000 |      10 | 2016-01-15 | 2016-06-15 |
+|    5555 |         5000 |      20 | 2017-02-15 | 2017-06-15 |
+|    6666 |         6000 |      30 | 2017-03-10 | 2017-08-15 |
++---------+--------------+---------+------------+------------+
+7 rows in set (0.00 sec)
+									MOVIE DATABASES
+									
+									
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| 1MV21CS012         |
+| 1MV21CS056         |
+| 1MV21CS085         |
+| 1MV22CS404         |
+| 22CS400            |
+| COPY               |
+| ORDERS             |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+11 rows in set (0.00 sec)
+
+mysql> CREATE DATABASE MOVIE;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> USE MOVIE;
+Database changed
+mysql> CREATE TABLE ACTOR
+    -> (
+    -> ACT_ID INT,
+    -> ACT_NAME VARCHAR(15),
+    -> ACT_GENDER CHAR,
+    -> CONSTRAINT PK_AID PRIMARY KEY(ACT_ID)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESC ACTOR;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| ACT_ID     | int         | NO   | PRI | NULL    |       |
+| ACT_NAME   | varchar(15) | YES  |     | NULL    |       |
+| ACT_GENDER | char(1)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE TABLE DIRECTOR
+    -> (
+    -> DIR_ID INT,
+    -> DIR_NAME VARCHAR(20),
+    -> DIR_PHONE BIGINT(10),
+    -> CONSTRAINT PK_DID PRIMARY KEY(DIR_ID)
+    -> );
+Query OK, 0 rows affected, 1 warning (0.02 sec)
+
+mysql> DESC DIRECTOR;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| DIR_ID    | int         | NO   | PRI | NULL    |       |
+| DIR_NAME  | varchar(20) | YES  |     | NULL    |       |
+| DIR_PHONE | bigint      | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> CREATE TABLE MOVIES
+    -> (
+    -> MOV_ID INT,
+    -> MOV_TITLE VARCHAR(25),
+    -> MOV_YEAR INT,
+    -> MOV_LANG VARCHAR(15),
+    -> DIR_ID INT,
+    -> CONSTRAINT PK_MID PRIMARY KEY(MOV_ID),
+    -> CONSTRAINT FK_DIR FOREIGN KEY(DIR_ID) REFERENCES DIRECTOR(DIR_ID) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC MOVIES;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| MOV_ID    | int         | NO   | PRI | NULL    |       |
+| MOV_TITLE | varchar(25) | YES  |     | NULL    |       |
+| MOV_YEAR  | int         | YES  |     | NULL    |       |
+| MOV_LANG  | varchar(15) | YES  |     | NULL    |       |
+| DIR_ID    | int         | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> CREATE TABLE MOVIE_CAST
+    -> (
+    -> ACT_ID INT,
+    -> MOV_ID INT,
+    -> ROLE CHAR,
+    -> CONSTRAINT CPK_AM PRIMARY KEY(ACT_ID,MOV_ID),
+    -> CONSTRAINT FK_AID FOREIGN KEY(ACT_ID) REFERENCES ACTOR(ACT_ID) ON DELETE CASCADE,
+    -> CONSTRAINT FK_MD FOREIGN KEY(MOV_ID) REFERENCES MOVIES(MOV_ID) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC MOVIE_CAST;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| ACT_ID | int     | NO   | PRI | NULL    |       |
+| MOV_ID | int     | NO   | PRI | NULL    |       |
+| ROLE   | char(1) | YES  |     | NULL    |       |
++--------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE TABLE  RATING
+    -> (
+    -> MOV_ID INT,
+    -> REV_STARS INT,
+    -> CONSTRAINT CPK_MCT PRIMARY KEY(MOV_ID,REV_STARS),
+    -> CONSTRAINT FK_MCD FOREIGN KEY(MOV_ID) REFERENCES MOVIES(MOV_ID) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC RATING;
++-----------+------+------+-----+---------+-------+
+| Field     | Type | Null | Key | Default | Extra |
++-----------+------+------+-----+---------+-------+
+| MOV_ID    | int  | NO   | PRI | NULL    |       |
+| REV_STARS | int  | NO   | PRI | NULL    |       |
++-----------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO ACTOR VALUES(10,'AAYUSHMAN','M');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO ACTOR VALUES(20,'VARUN DHAWAN','M');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ACTOR VALUES(30,'DEEPIKA','F');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ACTOR VALUES(40,'CHRISPRATT','M');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ACTOR VALUES(50,'ANTHONYPERKINS','M');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ACTOR VALUES(60,'SHRADDHA','F');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM ACTOR;
++--------+----------------+------------+
+| ACT_ID | ACT_NAME       | ACT_GENDER |
++--------+----------------+------------+
+|     10 | AAYUSHMAN      | M          |
+|     20 | VARUN DHAWAN   | M          |
+|     30 | DEEPIKA        | F          |
+|     40 | CHRISPRATT     | M          |
+|     50 | ANTHONYPERKINS | M          |
+|     60 | SHRADDHA       | F          |
++--------+----------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO DIRECTOR VALUES(11,'SOOJITH',1020304050);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO DIRECTOR VALUES(22,'STEVEN SPIELBERG',1122334455);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO DIRECTOR VALUES(33,'DAVID',9966443322);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO DIRECTOR VALUES(44,'HITCH COCK',1002003000);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO DIRECTOR VALUES(55,'BANSALI',9080706050);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO DIRECTOR VALUES(66,'REMO',9988776655);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM DIRECTOR;
++--------+------------------+------------+
+| DIR_ID | DIR_NAME         | DIR_PHONE  |
++--------+------------------+------------+
+|     11 | SOOJITH          | 1020304050 |
+|     22 | STEVEN SPIELBERG | 1122334455 |
+|     33 | DAVID            | 9966443322 |
+|     44 | HITCH COCK       | 1002003000 |
+|     55 | BANSALI          | 9080706050 |
+|     66 | REMO             | 9988776655 |
++--------+------------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO MOVIES VALUES(111,'ABCD2',1999,'HINDI',66);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MOVIES VALUES(222,'PSYCHO',1995,'ENGLISH',44);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MOVIES VALUES(333,'BAREILLI KI BURFI',2017,'HINDI',11);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MOVIES VALUES(444,'RAMALEELA',2015,'HINDI',55);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MOVIES VALUES(55,'MEIN TERA HERO',2014,'HINDI',33);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MOVIES VALUES(666,'JURASSIC PARK',2000,'ENGLISH',22);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO MOVIES VALUES(555,'MEIN TERA HERO',2014,'HINDI',33);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO MOVIES VALUES(777,'VICKY DONOR',2011,'HINDI',11);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> DELETE FROM MOVIES WHERE MOV_ID=55;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM MOVIES;
++--------+-------------------+----------+----------+--------+
+| MOV_ID | MOV_TITLE         | MOV_YEAR | MOV_LANG | DIR_ID |
++--------+-------------------+----------+----------+--------+
+|    111 | ABCD2             |     1999 | HINDI    |     66 |
+|    222 | PSYCHO            |     1995 | ENGLISH  |     44 |
+|    333 | BAREILLI KI BURFI |     2017 | HINDI    |     11 |
+|    444 | RAMALEELA         |     2015 | HINDI    |     55 |
+|    555 | MEIN TERA HERO    |     2014 | HINDI    |     33 |
+|    666 | JURASSIC PARK     |     2000 | ENGLISH  |     22 |
+|    777 | VICKY DONOR       |     2011 | HINDI    |     11 |
++--------+-------------------+----------+----------+--------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO MOVIE_CAST VALUES(10,333,'HERO');
+ERROR 1406 (22001): Data too long for column 'ROLE' at row 1
+mysql> ALTER TABLE MOVIE_CAST MODIFY ROLE CHAR(10);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO MOVIE_CAST VALUES(10,333,'HERO');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO MOVIE_CAST VALUES(20,555,'HERO');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MOVIE_CAST VALUES(30,444,'HEROINE');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MOVIE_CAST VALUES(40,666,'HERO');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO MOVIE_CAST VALUES(50,222,'VILLAIN');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MOVIE_CAST VALUES(60,111,'HEROINE');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MOVIE_CAST VALUES(20,111,'HERO');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MOVIE_CAST VALUES(10,777,'HERO');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO MOVIE_CAST VALUES(60,333,'HEROINE');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM MOVIE_CAST;
++--------+--------+---------+
+| ACT_ID | MOV_ID | ROLE    |
++--------+--------+---------+
+|     10 |    333 | HERO    |
+|     10 |    777 | HERO    |
+|     20 |    111 | HERO    |
+|     20 |    555 | HERO    |
+|     30 |    444 | HEROINE |
+|     40 |    666 | HERO    |
+|     50 |    222 | VILLAIN |
+|     60 |    111 | HEROINE |
+|     60 |    333 | HEROINE |
++--------+--------+---------+
+9 rows in set (0.00 sec)
+
+mysql> INSERT INTO RATING VALUES(111,3);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO RATING VALUES(111,5);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO RATING VALUES(222,2);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO RATING VALUES(222,3);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO RATING VALUES(333,0);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO RATING VALUES(444,4);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO RATING VALUES(444,5);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO RATING VALUES(555,3);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO RATING VALUES(666,2);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO RATING VALUES(777,4);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM RATING;
++--------+-----------+
+| MOV_ID | REV_STARS |
++--------+-----------+
+|    111 |         3 |
+|    111 |         5 |
+|    222 |         2 |
+|    222 |         3 |
+|    333 |         0 |
+|    444 |         4 |
+|    444 |         5 |
+|    555 |         3 |
+|    666 |         2 |
+|    777 |         4 |
++--------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT M.MOV_TITLE
+    -> FROM MOVIES M,DIRECTOR D
+    -> WHERE D.DIR_ID=M.DIR_ID AND D.DIR_NAME='HITCH COCK';
++-----------+
+| MOV_TITLE |
++-----------+
+| PSYCHO    |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT M.MOV_TITLE,A.ACT_NAME
+    -> FROM MOVIES M,ACTOR A,MOVIE_CAST M1
+    -> WHERE M.MOV_ID=M1.MOV_ID AND M1.ACT_ID=A.ACT_ID AND M1.ACT_ID IN
+    -> (SELECT ACT_ID
+    -> FROM MOVIE_CAST
+    -> GROUP BY ACT_ID
+    -> HAVING COUNT(MOV_ID)>1);
++-------------------+--------------+
+| MOV_TITLE         | ACT_NAME     |
++-------------------+--------------+
+| BAREILLI KI BURFI | AAYUSHMAN    |
+| VICKY DONOR       | AAYUSHMAN    |
+| ABCD2             | VARUN DHAWAN |
+| MEIN TERA HERO    | VARUN DHAWAN |
+| ABCD2             | SHRADDHA     |
+| BAREILLI KI BURFI | SHRADDHA     |
++-------------------+--------------+
+6 rows in set (0.00 sec)
+
+mysql> COMMIT;
+
+mysql> (SELECT A.ACT_NAME
+    -> FROM ACTOR A JOIN MOVIE_CAST M ON A.ACT_ID=M.ACT_ID
+    -> JOIN MOVIES M1 ON M.MOV_ID=M1.MOV_ID
+    -> WHERE M1.MOV_YEAR>2000)
+    -> INTERSECT
+    -> (SELECT A.ACT_NAME
+    -> FROM ACTOR A JOIN MOVIE_CAST M ON A.ACT_ID=M.ACT_ID
+    -> JOIN MOVIES M1 ON M.MOV_ID=M1.MOV_ID
+    -> WHERE M1.MOV_YEAR>2015);
++-----------+
+| ACT_NAME  |
++-----------+
+| AAYUSHMAN |
+| SHRADDHA  |
++-----------+
+2 rows in set (0.01 sec)
+
+mysql> (SELECT A.ACT_NAME FROM ACTOR A JOIN MOVIE_CAST M ON A.ACT_ID=M.ACT_ID JOIN MOVIES M1 ON M.MOV_ID=M1.MOV_ID WHERE M1.MOV_YEAR<2000) INTERSECT (SELECT A.ACT_NAME FROM ACTOR A JOIN MOVIE_CAST M ON A.ACT_ID=M.ACT_ID JOIN MOVIES M1 ON M.MOV_ID=M1.MOV_ID WHERE M1.MOV_YEAR>2015);
++----------+
+| ACT_NAME |
++----------+
+| SHRADDHA |
++----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT M.MOV_TITLE,MAX(R.REV_STARS)
+    -> FROM MOVIES M,RATING R
+    -> WHERE M.MOV_ID=R.MOV_ID AND 
+    -> M.MOV_ID IN(SELECT MOV_ID
+    -> FROM RATING
+    -> GROUP BY MOV_ID,REV_STARS
+    -> HAVING REV_STARS>0)
+    -> GROUP BY M.MOV_TITLE
+    -> ORDER BY M.MOV_TITLE;
++----------------+------------------+
+| MOV_TITLE      | MAX(R.REV_STARS) |
++----------------+------------------+
+| ABCD2          |                5 |
+| JURASSIC PARK  |                2 |
+| MEIN TERA HERO |                3 |
+| PSYCHO         |                3 |
+| RAMALEELA      |                5 |
+| VICKY DONOR    |                4 |
++----------------+------------------+
+6 rows in set (0.01 sec)
+
+mysql> UPDATE RATING SET REV_STARS=5
+    -> WHERE MOV_ID IN (SELECT MOV_ID
+    -> FROM MOVIES
+    -> WHERE DIR_ID=(SELECT DIR_ID
+    -> FROM DIRECTOR
+    -> WHERE DIR_NAME='STEVEN SPIELBERG'));
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT *FROM RATING;
++--------+-----------+
+| MOV_ID | REV_STARS |
++--------+-----------+
+|    111 |         3 |
+|    111 |         5 |
+|    222 |         2 |
+|    222 |         3 |
+|    333 |         0 |
+|    444 |         4 |
+|    444 |         5 |
+|    555 |         3 |
+|    666 |         5 |
+|    777 |         4 |
++--------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> COMMIT;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CREATE DATBASES COLLEGE;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DATBASES COLLEGE' at line 1
+mysql> CREATE DATBASE COLLEGE;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DATBASE COLLEGE' at line 1
+mysql> CREATE DATABASE COLLEGE;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> USE COLLEGE;
+Database changed
+mysql> CREATE TABLE STUDENT
+    -> (
+    -> USN CHAR(10),
+    -> SNAME VARCHAR(20),
+    -> ADDRESS VARCHAR(25),
+    -> PHONE BIGINT(10),
+    -> GENDER CHAR,
+    -> CONSTRAINT A PRIMARY KEY(USN)
+    -> );
+Query OK, 0 rows affected, 1 warning (0.02 sec)
+
+mysql> DESC STUDENT;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| USN     | char(10)    | NO   | PRI | NULL    |       |
+| SNAME   | varchar(20) | YES  |     | NULL    |       |
+| ADDRESS | varchar(25) | YES  |     | NULL    |       |
+| PHONE   | bigint      | YES  |     | NULL    |       |
+| GENDER  | char(1)     | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> CREATE TABLE SEMSEC
+    -> (
+    -> SSID CHAR(2),
+    -> SEM INT,
+    -> SEC CHAR,
+    -> CONSTRAINT B PRIMARY KEY(SSID),
+    -> CONSTRAINT C_S CHECK(SEM BETWEEN 1 AND 8)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESC SEMSEC;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| SSID  | char(2) | NO   | PRI | NULL    |       |
+| SEM   | int     | YES  |     | NULL    |       |
+| SEC   | char(1) | YES  |     | NULL    |       |
++-------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE TABLE SUBJECT
+    -> (
+    -> SUBCODE VARCHAR(7),
+    -> TITLE VARCHAR(20),
+    -> SEM INT,
+    -> CREDITS INT,
+    -> CONSTRAINT G PRIMARY KEY(SUBCODE)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESC SUBJECT;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| SUBCODE | varchar(7)  | NO   | PRI | NULL    |       |
+| TITLE   | varchar(20) | YES  |     | NULL    |       |
+| SEM     | int         | YES  |     | NULL    |       |
+| CREDITS | int         | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> CREATE TABLE CLASS 
+    -> (
+    -> USN CHAR(10),
+    -> SSID CHAR(2),
+    -> CONSTRAINT CPK_SS PRIMARY KEY(USN,SSID),
+    -> CONSTRAINT FK_SN FOREIGN KEY(USN) REFERENCES STUDENT(USN) ON DELETE CASCADE,
+    -> CONSTRAINT FK_SD FOREIGN KEY(SSID) REFERENCES SEMSEC(SSID) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC CLASS;
++-------+----------+------+-----+---------+-------+
+| Field | Type     | Null | Key | Default | Extra |
++-------+----------+------+-----+---------+-------+
+| USN   | char(10) | NO   | PRI | NULL    |       |
+| SSID  | char(2)  | NO   | PRI | NULL    |       |
++-------+----------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> CREATE TABLE IAMARKS
+    -> (
+    -> USN CHAR(10),
+    -> SUBCODE VARCHAR(7),
+    -> SSID CHAR(2),
+    -> TEST1 INT,
+    -> TEST2 INT,
+    -> TEST3 INT,
+    -> FINALIA INT,
+    -> CONSTRAINT CPK_USD PRIMARY KEY(USN,SUBCODE,SSID),
+    -> CONSTRAINT FK_N FOREIGN KEY(USN) REFERENCES STUDENT(USN) ON DELETE CASCADE,
+    -> CONSTRAINT FK_D FOREIGN KEY(SSID) REFERENCES SEMSEC(SSID) ON DELETE CASCADE,
+    -> CONSTRAINT FK_C FOREIGN KEY(SUBCODE) REFERENCES SUBJECT(SUBCODE) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC IAMARKS;
++---------+------------+------+-----+---------+-------+
+| Field   | Type       | Null | Key | Default | Extra |
++---------+------------+------+-----+---------+-------+
+| USN     | char(10)   | NO   | PRI | NULL    |       |
+| SUBCODE | varchar(7) | NO   | PRI | NULL    |       |
+| SSID    | char(2)    | NO   | PRI | NULL    |       |
+| TEST1   | int        | YES  |     | NULL    |       |
+| TEST2   | int        | YES  |     | NULL    |       |
+| TEST3   | int        | YES  |     | NULL    |       |
+| FINALIA | int        | YES  |     | NULL    |       |
++---------+------------+------+-----+---------+-------+
+7 rows in set (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV17CS001','AASHISH','BANGALORE',1020304050,'M');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV17CS060','NAELA','MYSORE',1122334455,'F');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV17CS130','MILIND','JAMMU',5060708090,'M');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV16CS001','ABHIJITH','PUNE',9988776655,'M');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV16CS060','NIKITHA','HYDERABAD',9080706050,'F');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV16CS130','SANJANA','GUWAHATTI',1234567890,'F');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV15CS001','ANSHUMAN','PANAJI',1112223334,'M');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV15CS060','AMRUTHA','BANGALORE',1002003004,'F');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV15CS130','BHUVANESH','JAIPUR',9008007006,'M');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV14CS001','DEVAYANI','BANGALORE',1000200030,'F');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV14CS060','DAVID','KOCHI',9000800070,'M');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES('1MV14CS130','AISHWARYA','MUMBAI',1000020000,'F');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM STUDENT;
++------------+-----------+-----------+------------+--------+
+| USN        | SNAME     | ADDRESS   | PHONE      | GENDER |
++------------+-----------+-----------+------------+--------+
+| 1MV14CS001 | DEVAYANI  | BANGALORE | 1000200030 | F      |
+| 1MV14CS060 | DAVID     | KOCHI     | 9000800070 | M      |
+| 1MV14CS130 | AISHWARYA | MUMBAI    | 1000020000 | F      |
+| 1MV15CS001 | ANSHUMAN  | PANAJI    | 1112223334 | M      |
+| 1MV15CS060 | AMRUTHA   | BANGALORE | 1002003004 | F      |
+| 1MV15CS130 | BHUVANESH | JAIPUR    | 9008007006 | M      |
+| 1MV16CS001 | ABHIJITH  | PUNE      | 9988776655 | M      |
+| 1MV16CS060 | NIKITHA   | HYDERABAD | 9080706050 | F      |
+| 1MV16CS130 | SANJANA   | GUWAHATTI | 1234567890 | F      |
+| 1MV17CS001 | AASHISH   | BANGALORE | 1020304050 | M      |
+| 1MV17CS060 | NAELA     | MYSORE    | 1122334455 | F      |
+| 1MV17CS130 | MILIND    | JAMMU     | 5060708090 | M      |
++------------+-----------+-----------+------------+--------+
+12 rows in set (0.00 sec)
+
+mysql> 
+
+mysql> INSERT INTO SEMSEC VALUES('2A',2,'A');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SEMSEC VALUES('2B',2,'B');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SEMSEC VALUES('2C',2,'C');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SEMSEC VALUES('4A',4,'A');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SEMSEC VALUES('4B',4,'B');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO SEMSEC VALUES('4C',4,'C');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SEMSEC VALUES('6A',6,'A');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO SEMSEC VALUES('6B',6,'B');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO SEMSEC VALUES('6C',6,'C');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SEMSEC VALUES('8A',8,'A');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SEMSEC VALUES('8B',8,'B');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SEMSEC VALUES('8C',8,'C');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM SEMSEC;
++------+------+------+
+| SSID | SEM  | SEC  |
++------+------+------+
+| 2A   |    2 | A    |
+| 2B   |    2 | B    |
+| 2C   |    2 | C    |
+| 4A   |    4 | A    |
+| 4B   |    4 | B    |
+| 4C   |    4 | C    |
+| 6A   |    6 | A    |
+| 6B   |    6 | B    |
+| 6C   |    6 | C    |
+| 8A   |    8 | A    |
+| 8B   |    8 | B    |
+| 8C   |    8 | C    |
++------+------+------+
+12 rows in set (0.00 sec)
+
+mysql> INSERT INTO SUBJECT VALUES('15CS21','M2',2,4);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SUBJECT VALUES('15PCD23','PCD',2,4);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SUBJECT VALUES('15CS42','SE',4,4);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SUBJECT VALUES('15CS44','MP',4,4);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO SUBJECT VALUES('15CS64','CG',6,4);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SUBJECT VALUES('15CS62','USP',6,4);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SUBJECT VALUES('10CS81','SA',8,4);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO SUBJECT VALUES('10CS842','ST',8,3);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM SUBJECT;
++---------+-------+------+---------+
+| SUBCODE | TITLE | SEM  | CREDITS |
++---------+-------+------+---------+
+| 10CS81  | SA    |    8 |       4 |
+| 10CS842 | ST    |    8 |       3 |
+| 15CS21  | M2    |    2 |       4 |
+| 15CS42  | SE    |    4 |       4 |
+| 15CS44  | MP    |    4 |       4 |
+| 15CS62  | USP   |    6 |       4 |
+| 15CS64  | CG    |    6 |       4 |
+| 15PCD23 | PCD   |    2 |       4 |
++---------+-------+------+---------+
+8 rows in set (0.00 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV14CS001','8A');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV14CS060','8B');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV14CS130','8C');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV15CS130','6C');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV15CS060','6B');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV15CS001','6A');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV16CS001','4A');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV16CS060','4B');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV16CS130','4C');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV17CS130','2C');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV17CS060','2B');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO CLASS VALUES('1MV17CS001','2A');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM CLASS;
++------------+------+
+| USN        | SSID |
++------------+------+
+| 1MV17CS001 | 2A   |
+| 1MV17CS060 | 2B   |
+| 1MV17CS130 | 2C   |
+| 1MV16CS001 | 4A   |
+| 1MV16CS060 | 4B   |
+| 1MV16CS130 | 4C   |
+| 1MV15CS001 | 6A   |
+| 1MV15CS060 | 6B   |
+| 1MV15CS130 | 6C   |
+| 1MV14CS001 | 8A   |
+| 1MV14CS060 | 8B   |
+| 1MV14CS130 | 8C   |
++------------+------+
+12 rows in set (0.00 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TEST1,TEST2,TEST3)VALUES('1MV17CS001','15CS21','2A',15,14,13);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TEST1,TEST2,TEST3)VALUES('1MV17CS060','15PCD23','2B',15,15,14);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TESdb@smvit:~$ sudo mysql -u root -p
+[sudo] password for db: 
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.36-0ubuntu0.23.10.1 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| 094_ORDERS         |
+| 1MV21CS024         |
+| 1MV21CS039         |
+| 1MV21CS073         |
+| 1MV21CS094         |
+| 1MV21CS103         |
+| 1MV21CS129         |
+| ORDER_DB           |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+12 rows in set (0.01 sec)
+
+mysql> use 1MV21CS129;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+T1,TEST2,TEST3)VALUES('1MV17CS130','15CS21','2C',11,12,13);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TEST1,TEST2,TEST3)VALUES('1MV16CS001','15CS42','4A',19,19,18);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TEST1,TEST2,TEST3)VALUES('1MV16CS060','15CS44','4B',5,8,5);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TEST1,TEST2,TEST3)VALUES('1MV16CS130','15CS42','4C',20,20,20);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TEST1,TEST2,TEST3)VALUES('1MV15CS001','15CS64','6A',12,12,12);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TEST1,TEST2,TEST3)VALUES('1MV15CS060','15CS62','6B',18,19,20);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TEST1,TEST2,TEST3)VALUES('1MV15CS130','15CS64','6C',8,12,11);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TEST1,TEST2,TEST3)VALUES('1MV14CS001','10CS81','8A',3,11,12);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TEST1,TEST2,TEST3)VALUES('1MV14CS060','10CS842','8B',0,0,7);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO IAMARKS(USN,SUBCODE,SSID,TEST1,TEST2,TEST3)VALUES('1MV14CS130','10CS81','8C',0,0,20);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> SELECT * FROM IAMARKS;
++------------+---------+------+-------+-------+-------+---------+
+| USN        | SUBCODE | SSID | TEST1 | TEST2 | TEST3 | FINALIA |
++------------+---------+------+-------+-------+-------+---------+
+| 1MV14CS001 | 10CS81  | 8A   |     3 |    11 |    12 |    NULL |
+| 1MV14CS060 | 10CS842 | 8B   |     0 |     0 |     7 |    NULL |
+| 1MV14CS130 | 10CS81  | 8C   |     0 |     0 |    20 |    NULL |
+| 1MV15CS001 | 15CS64  | 6A   |    12 |    12 |    12 |    NULL |
+| 1MV15CS060 | 15CS62  | 6B   |    18 |    19 |    20 |    NULL |
+| 1MV15CS130 | 15CS64  | 6C   |     8 |    12 |    11 |    NULL |
+| 1MV16CS001 | 15CS42  | 4A   |    19 |    19 |    18 |    NULL |
+| 1MV16CS060 | 15CS44  | 4B   |     5 |     8 |     5 |    NULL |
+| 1MV16CS130 | 15CS42  | 4C   |    20 |    20 |    20 |    NULL |
+| 1MV17CS001 | 15CS21  | 2A   |    15 |    14 |    13 |    NULL |
+| 1MV17CS060 | 15PCD23 | 2B   |    15 |    15 |    14 |    NULL |
+| 1MV17CS130 | 15CS21  | 2C   |    11 |    12 |    13 |    NULL |
++------------+---------+------+-------+-------+-------+---------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT S.USN,S.SNAME,S.ADDRESS,S.PHONE,S.GENDER
+    -> FROM STUDENT S,CLASS C,SEMSEC SS
+    -> WHERE S.USN=C.USN AND
+    -> SS.SSID=C.SSID AND
+    -> SS.SEM=4 AND 
+    -> SS.SEC='C';
++------------+---------+-----------+------------+--------+
+| USN        | SNAME   | ADDRESS   | PHONE      | GENDER |
++------------+---------+-----------+------------+--------+
+| 1MV16CS130 | SANJANA | GUWAHATTI | 1234567890 | F      |
++------------+---------+-----------+------------+--------+
+1 row in set (0.01 sec)
+
+mysql> SELECT SS.SEM,SS.SEC,S.GENDER,COUNT(S.GENDER)
+    -> FROM STUDENT S,SEMSEC SS,CLASS C
+    -> WHERE S.USN=C.USN AND SS.SSID=C.SSID
+    -> GROUP BY SS.SEM,SS.SEC,S.GENDER;
++------+------+--------+-----------------+
+| SEM  | SEC  | GENDER | COUNT(S.GENDER) |
++------+------+--------+-----------------+
+|    8 | A    | F      |               1 |
+|    8 | B    | M      |               1 |
+|    8 | C    | F      |               1 |
+|    6 | A    | M      |               1 |
+|    6 | B    | F      |               1 |
+|    6 | C    | M      |               1 |
+|    4 | A    | M      |               1 |
+|    4 | B    | F      |               1 |
+|    4 | C    | F      |               1 |
+|    2 | A    | M      |               1 |
+|    2 | B    | F      |               1 |
+|    2 | C    | M      |               1 |
++------+------+--------+-----------------+
+12 rows in set (0.01 sec)
+
+mysql> CREATE VIEW TEST1_MARKS AS
+    -> SELECT USN,SUBCODE,TEST1
+    -> FROM IAMARKS
+    -> WHERE USN='1MV15CS060';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SELECT * FROM TEST1_MARKS;
++------------+---------+-------+
+| USN        | SUBCODE | TEST1 |
++------------+---------+-------+
+| 1MV15CS060 | 15CS62  |    18 |
++------------+---------+-------+
+1 row in set (0.01 sec)
+
+DELIMITER #
+mysql> CREATE PROCEDURE AVGMARKS()
+    -> BEGIN
+    -> DECLARE C_A INT;
+    -> DECLARE C_B INT;
+    -> DECLARE C_C INT;
+    -> DECLARE C_SUM INT;
+    -> DECLARE C_USN CHAR(10);
+    -> DECLARE C_IAMARKS CURSOR FOR
+    -> SELECT GREATEST(TEST1,TEST2),
+    -> GREATEST(TEST1,TEST3),
+    -> GREATEST(TEST2,TEST3),USN 
+    -> FROM IAMARKS
+    -> WHERE FINALIA IS NULL
+    -> FOR UPDATE;
+    -> OPEN C_IAMARKS;
+    -> LOOP
+    -> FETCH C_IAMARKS INTO C_A,C_B,C_C,C_USN;
+    -> IF(C_A!=C_B) THEN
+    -> SET C_SUM=C_A+C_B;
+    -> ELSE
+    -> C_SUM=C_A+C_C;
+    -> END IF;
+    -> SET C_AVG=C_SUM/2;
+    -> UPDATE IAMARKS SET FINALIA =C_AVG
+    -> WHERE USN=C_USN
+    -> END LOOP;
+    -> CLOSE C_IAMARKS;
+    -> END;
+    -> #DELIMITER;
+
+ Company Database
+
+CREATE TABLE DEPARTMENT
+(DNO VARCHAR2 (20) PRIMARY KEY,
+DNAME VARCHAR2 (20),
+MGRSTARTDATE DATE);
+
+
+CREATE TABLE EMPLOYEE
+(SSN VARCHAR2 (20) PRIMARY KEY,
+FNAME VARCHAR2 (20),
+LNAME VARCHAR2 (20),
+ADDRESS VARCHAR2 (20),
+SEX CHAR (1),
+SALARY INTEGER,
+SUPERSSN REFERENCES EMPLOYEE (SSN),
+DNO REFERENCES DEPARTMENT (DNO));
+--NOTE: Once DEPARTMENT and EMPLOYEE tables are created we must
+--alter department table to add foreign constraint MGRSSN using sql command
+
+ALTER TABLE DEPARTMENT
+ADD MGRSSN REFERENCES EMPLOYEE (SSN);
+
+DESC EMPLOYEE;
+DESC DEPARTMENT;
+
+
+CREATE TABLE DLOCATION
+(DLOC VARCHAR2 (20),
+DNO REFERENCES DEPARTMENT (DNO),
+PRIMARY KEY (DNO, DLOC));
+
+DESC DLOCATION;
+
+
+CREATE TABLE PROJECT
+(PNO INTEGER PRIMARY KEY,
+Prepared by Prof. Guru Prasad and Prof. Suresh Chimkode
+PNAME VARCHAR2 (20),
+PLOCATION VARCHAR2 (20),
+DNO REFERENCES DEPARTMENT (DNO));
+
+DESC PROJECT;
+
+
+CREATE TABLE WORKS_ON
+(HOURS NUMBER (2),
+SSN REFERENCES EMPLOYEE (SSN),
+PNO REFERENCES PROJECT(PNO),
+PRIMARY KEY (SSN, PNO));
+
+DESC WORKS_ON;
+
+
+
+
+INSERT INTO EMPLOYEE (SSN, FNAME, LNAME, ADDRESS, SEX, SALARY) VALUES
+ (‘RNSECE01’,’JOHN’,’SCOTT’,’BANGALORE’,’M’, 450000);
+INSERT INTO EMPLOYEE (SSN, FNAME, LNAME, ADDRESS, SEX, SALARY) VALUES
+ (‘RNSCSE01’,’JAMES’,’SMITH’,’BANGALORE’,’M’, 500000);
+INSERT INTO EMPLOYEE (SSN, FNAME, LNAME, ADDRESS, SEX, SALARY) VALUES
+ (‘RNSCSE02’,’HEARN’,’BAKER’,’BANGALORE’,’M’, 700000);
+INSERT INTO EMPLOYEE (SSN, FNAME, LNAME, ADDRESS, SEX, SALARY) VALUES
+ (‘RNSCSE03’,’EDWARD’,’SCOTT’,’MYSORE’,’M’, 500000);
+INSERT INTO EMPLOYEE (SSN, FNAME, LNAME, ADDRESS, SEX, SALARY) VALUES
+ (‘RNSCSE04’,’PAVAN’,’HEGDE’,’MANGALORE’,’M’, 650000);
+INSERT INTO EMPLOYEE (SSN, FNAME, LNAME, ADDRESS, SEX, SALARY) VALUES
+ (‘RNSCSE05’,’GIRISH’,’MALYA’,’MYSORE’,’M’, 450000);
+INSERT INTO EMPLOYEE (SSN, FNAME, LNAME, ADDRESS, SEX, SALARY) VALUES
+ (‘RNSCSE06’,’NEHA’,’SN’,’BANGALORE’,’F’, 800000);
+INSERT INTO EMPLOYEE (SSN, FNAME, LNAME, ADDRESS, SEX, SALARY) VALUES
+ (‘RNSACC01’,’AHANA’,’K’,’MANGALORE’,’F’, 350000);
+INSERT INTO EMPLOYEE (SSN, FNAME, LNAME, ADDRESS, SEX, SALARY) VALUES
+ (‘RNSACC02’,’SANTHOSH’,’KUMAR’,’MANGALORE’,’M’, 300000);
+INSERT INTO EMPLOYEE (SSN, FNAME, LNAME, ADDRESS, SEX, SALARY) VALUES
+ (‘RNSISE01’,’VEENA’,’M’,’MYSORE’,’M’, 600000);
+INSERT INTO EMPLOYEE (SSN, FNAME, LNAME, ADDRESS, SEX, SALARY) VALUES
+ (‘RNSIT01’,’NAGESH’,’HR’,’BANGALORE’,’M’, 500000);
+
+SELECT * FROM EMPLOYEE;
+
+
+INSERT INTO DEPARTMENT VALUES (‘1’,’ACCOUNTS’,’01-JAN-01’,’RNSACC02’);
+INSERT INTO DEPARTMENT VALUES (‘2’,’IT’,’01-AUG-16’,’RNSIT01’);
+INSERT INTO DEPARTMENT VALUES (‘3’,’ECE’,’01-JUN-08’,’RNSECE01’);
+INSERT INTO DEPARTMENT VALUES (‘4’,’ISE’,’01-AUG-15’,’RNSISE01’);
+INSERT INTO DEPARTMENT VALUES (‘5’,’CSE’,’01-JUN-02’,’RNSCSE05’);
+--Note: update entries of employee table to fill missing fields SUPERSSN and DNO
+
+SELECT * FROM DEPARTMENT;
+
+
+UPDATE EMPLOYEE SET
+SUPERSSN=NULL, DNO='3'
+WHERE SSN='RNSECE01';
+
+UPDATE EMPLOYEE SET
+SUPERSSN='RNSCSE02', DNO='5'
+WHERE SSN='RNSCSE01';
+
+UPDATE EMPLOYEE SET
+SUPERSSN='RNSCSE03', DNO='5'
+WHERE SSN='RNSCSE02';
+
+UPDATE EMPLOYEE SET
+SUPERSSN='RNSCSE04', DNO='5'
+WHERE SSN='RNSCSE03';
+
+UPDATE EMPLOYEE SET
+DNO='5', SUPERSSN='RNSCSE05'
+WHERE SSN='RNSCSE04';
+
+UPDATE EMPLOYEE SET
+DNO='5', SUPERSSN='RNSCSE06'
+WHERE SSN='RNSCSE05';
+
+UPDATE EMPLOYEE SET
+DNO='5', SUPERSSN=NULL
+WHERE SSN='RNSCSE06';
+
+UPDATE EMPLOYEE SET
+DNO='1', SUPERSSN='RNSACC02'
+WHERE SSN='RNSACC01';
+
+UPDATE EMPLOYEE SET
+DNO='1', SUPERSSN=NULL
+WHERE SSN='RNSACC02';
+
+UPDATE EMPLOYEE SET
+DNO='4', SUPERSSN=NULL
+WHERE SSN='RNSISE01';
+
+UPDATE EMPLOYEE SET
+DNO='2', SUPERSSN=NULL
+WHERE SSN='RNSIT01';
+
+SELECT * FROM EMPLOYEE;
+
+
+INSERT INTO DLOCATION VALUES ('BANGALORE', '1');
+INSERT INTO DLOCATION VALUES ('BANGALORE', '2');
+INSERT INTO DLOCATION VALUES ('BANGALORE', '3');
+INSERT INTO DLOCATION VALUES ('MANGALORE', '4');
+INSERT INTO DLOCATION VALUES ('MANGALORE', '5');
+
+SELECT * FROM DLOCATION;
+
+
+INSERT INTO PROJECT VALUES (100,'IOT','BANGALORE','5');
+INSERT INTO PROJECT VALUES (101,'CLOUD','BANGALORE','5');
+INSERT INTO PROJECT VALUES (102,'BIGDATA','BANGALORE','5');
+INSERT INTO PROJECT VALUES (103,'SENSORS','BANGALORE','3');
+INSERT INTO PROJECT VALUES (104,'BANK MANAGEMENT','BANGALORE','1');
+INSERT INTO PROJECT VALUES (105,'SALARY MANAGEMENT','BANGALORE','1');
+INSERT INTO PROJECT VALUES (106,'OPENSTACK','BANGALORE','4');
+INSERT INTO PROJECT VALUES (107,'SMART CITY','BANGALORE','2');
+
+SELECT * FROM PROJECT;
+
+INSERT INTO WORKS_ON VALUES (4, 'RNSCSE01', 100);
+INSERT INTO WORKS_ON VALUES (6, 'RNSCSE01', 101);
+INSERT INTO WORKS_ON VALUES (8, 'RNSCSE01', 102);
+INSERT INTO WORKS_ON VALUES (10, 'RNSCSE02', 100);
+INSERT INTO WORKS_ON VALUES (3, 'RNSCSE04', 100);
+INSERT INTO WORKS_ON VALUES (4, 'RNSCSE05', 101);
+INSERT INTO WORKS_ON VALUES (5, 'RNSCSE06', 102);
+INSERT INTO WORKS_ON VALUES (6, 'RNSCSE03', 102);
+INSERT INTO WORKS_ON VALUES (7, 'RNSECE01', 103);
+INSERT INTO WORKS_ON VALUES (5, 'RNSACC01', 104);
+INSERT INTO WORKS_ON VALUES (6, 'RNSACC02', 105);
+INSERT INTO WORKS_ON VALUES (4, 'RNSISE01', 106);
+INSERT INTO WORKS_ON VALUES (10,'RNSITE01', 107);
+
+SELECT * FROM WORKS_ON;
+
+
+--Queries
+
+-- QUERY 1
+
+(SELECT DISTINCT P.PNO
+FROM PROJECT P, DEPARTMENT D, EMPLOYEE E
+WHERE E.DNO=D.DNO
+AND D.MGRSSN=E.SSN
+AND E.LNAME='SCOTT')
+UNION
+(SELECT DISTINCT P1.PNO
+FROM PROJECT P1, WORKS_ON W, EMPLOYEE E1
+WHERE P1.PNO=W.PNO
+AND E1.SSN=W.SSN
+AND E1.LNAME='SCOTT');
+
+-- QUERY 2
+
+SELECT E.FNAME, E.LNAME, 1.1*E.SALARY AS INCR_SAL
+FROM EMPLOYEE E, WORKS_ON W, PROJECT P
+WHERE E.SSN=W.SSN
+AND W.PNO=P.PNO
+AND P.PNAME='IOT';
+
+-- QUERY 3
+
+SELECT SUM (E.SALARY), MAX (E.SALARY), MIN (E.SALARY), AVG (E.SALARY)
+FROM EMPLOYEE E, DEPARTMENT D
+WHERE E.DNO=D.DNO
+AND D.DNAME='ACCOUNTS';
+
+--QUERY 4
+
+SELECT E.FNAME, E.LNAME
+FROM EMPLOYEE E
+WHERE NOT EXISTS((SELECT PNO FROM PROJECT WHERE DNO='5') MINUS (SELECT
+PNO FROM WORKS_ON
+WHERE E.SSN=SSN));
+
+--QUERY 5
+
+
+SELECT D.DNO, COUNT (*)
+FROM DEPARTMENT D, EMPLOYEE E
+WHERE D.DNO=E.DNO
+AND E.SALARY>600000
+AND D.DNO IN (SELECT E1.DNO
+FROM EMPLOYEE E1
+GROUP BY E1.DNO
+HAVING COUNT (*)>5)
+GROUP BY D.DNO;
